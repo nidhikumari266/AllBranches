@@ -389,3 +389,65 @@ Just tell me 👍
 ✅ Help you design DB schema + APIs
 
 Just tell me 👍
+
+
+
+
+
+    @GetMapping
+    public List<OrderResponse> getOrderList(){
+        List<OrderResponse> orderList = orderService.findAll();
+        return orderList;
+    }
+
+    @GetMapping("/id")
+    public OrderResponse getOrderById(@RequestParam("id") Long id){
+      OrderResponse OrdersResponse = orderService.findById(id);
+        return OrdersResponse;
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderResponse> updateOrder(
+            @PathVariable Long id,
+            @Valid @RequestBody OrderRequest request) {
+
+        OrderResponse response = orderService.update(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+
+    List<OrderResponse> findAll();
+
+    OrderResponse findById(Long id);
+
+    OrderResponse update(Long id, @Valid OrderRequest request);
+
+
+
+      @Override
+    public List<OrderResponse> findAll() {
+        return orderMapper.toResponseList(orderRepository.findAll());
+    }
+
+    @Override
+    public OrderResponse findById(Long id) {
+        Order order = orderRepository.findById(Math.toIntExact(id))
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        return orderMapper.toResponse(order);
+    }
+
+    @Override
+    public OrderResponse update(Long id, OrderRequest request) {
+        Order existingOrder = orderRepository.findById(Math.toIntExact(id))
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        orderMapper.updateEntity(existingOrder, request);
+        Order updatedOrder = orderRepository.save(existingOrder);
+        return orderMapper.toResponse(updatedOrder);
+    }
+
+
+
+     List<OrderResponse> toResponseList(List<Order> orders);
+
+    void updateEntity(Order existingOrder, OrderRequest request);
