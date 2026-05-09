@@ -19,9 +19,10 @@ public class OrderResource {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<String> save(@Valid @RequestBody OrderRequest request) {
         String response = orderService.save(request);
+        System.out.println( "response " + response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

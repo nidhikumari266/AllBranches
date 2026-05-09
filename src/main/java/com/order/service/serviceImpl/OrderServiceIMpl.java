@@ -23,7 +23,10 @@ public class OrderServiceIMpl implements OrderService {
 
     @Override
     public String save(OrderRequest orderRequest) {
+
+        System.out.println("OrderServiceIMpl save" + orderRequest);
         Order order = orderMapper.toEntity(orderRequest);
+        System.out.println( " ************* order "  + order);
         orderRepository.save(order);
         return "Order saved successfully";
     }
